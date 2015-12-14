@@ -1,5 +1,9 @@
 <?php
 
+
+require_once 'vendor/Mobile-Detect-2.8.17/Mobile_Detect.php';
+$detect = new Mobile_Detect;
+
 if ( ! class_exists( 'Timber' ) ) {
 	add_action( 'admin_notices', function() {
 			echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php' ) ) . '</a></p></div>';
@@ -7,18 +11,48 @@ if ( ! class_exists( 'Timber' ) ) {
 	return;
 }
 
-Timber::$dirname = array('templates', 'views');
+$template_base = 'templates';
+
+// Any mobile device (phones or tablets).
+if ( $detect->isMobile() && !$detect->isTablet() ) {
+	Timber::$dirname = array( $template_base.'/mobile', $template_base.'/layouts', $template_base.'/partials', 'views');
+} else if( $detect->isTablet() ){
+	Timber::$dirname = array( $template_base.'/tablet', $template_base.'/mobile', $template_base.'/layouts', $template_base.'/partials', 'views');
+} else {
+	Timber::$dirname = array( $template_base.'/desktop', $template_base.'/tablet', $template_base.'/mobile', $template_base.'/layouts', $template_base.'/partials', 'views');
+}
 
 class StarterSite extends TimberSite {
 
 	function __construct() {
-		add_theme_support( 'post-formats' );
+		load_theme_textdomain( 'nilslindstrom-theme', get_template_directory() . '/languages' );
+		add_theme_support( 'automatic-feed-links' );
+		add_theme_support( 'title-tag' );
+		add_theme_support( 'html5', array(
+			'search-form',
+			'comment-form',
+			'comment-list',
+			'gallery',
+			'caption',
+		));
+		add_theme_support( 'post-formats', array(
+			'aside',
+			'image',
+			'video',
+			'quote',
+			'link',
+		));
 		add_theme_support( 'post-thumbnails' );
 		add_theme_support( 'menus' );
+		register_nav_menus( array(
+			'primary' => esc_html__( 'Primary', 'theme' ),
+		));
 		add_filter( 'timber_context', array( $this, 'add_to_context' ) );
 		add_filter( 'get_twig', array( $this, 'add_to_twig' ) );
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'init', array( $this, 'register_taxonomies' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'loadScripts' ) );
+		add_action( 'widgets_init', array( $this, 'widgets' ) );
 		parent::__construct();
 	}
 
@@ -34,7 +68,8 @@ class StarterSite extends TimberSite {
 		$context['foo'] = 'bar';
 		$context['stuff'] = 'I am a value set in your functions.php file';
 		$context['notes'] = 'These values are available everytime you call Timber::get_context();';
-		$context['menu'] = new TimberMenu();
+		$context['menu'] = new TimberMenu('primary-menu');
+		$context['dynamic_sidebar'] = Timber::get_widgets('sidebar-1');
 		$context['site'] = $this;
 		return $context;
 	}
@@ -46,6 +81,21 @@ class StarterSite extends TimberSite {
 		return $twig;
 	}
 
+	function loadScripts() {
+    wp_enqueue_script( 'script-name', get_template_directory_uri() . '/js/example.js', array(), '1.0.0', true );
+  }
+
+	function widgets() {
+		register_sidebar( array(
+			'name'          => esc_html__( 'Sidebar', 'theme' ),
+			'id'            => 'sidebar-1',
+			'description'   => '',
+			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		) );
+	}
 }
 
 new StarterSite();
