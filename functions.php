@@ -1,8 +1,7 @@
 <?php
-
-
+// Require device detection library
 require_once 'vendor/Mobile-Detect-2.8.17/Mobile_Detect.php';
-$detect = new Mobile_Detect;
+require_once 'timber/timber.php';
 
 if ( ! class_exists( 'Timber' ) ) {
 	add_action( 'admin_notices', function() {
@@ -11,16 +10,23 @@ if ( ! class_exists( 'Timber' ) ) {
 	return;
 }
 
+// Base template route
 $template_base = 'templates';
 
-// Any mobile device (phones or tablets).
-if ( $detect->isMobile() && !$detect->isTablet() ) {
-	Timber::$dirname = array( $template_base.'/mobile', $template_base.'/layouts', $template_base.'/partials', 'views');
-} else if( $detect->isTablet() ){
-	Timber::$dirname = array( $template_base.'/tablet', $template_base.'/mobile', $template_base.'/layouts', $template_base.'/partials', 'views');
-} else {
-	Timber::$dirname = array( $template_base.'/desktop', $template_base.'/tablet', $template_base.'/mobile', $template_base.'/layouts', $template_base.'/partials', 'views');
+// Base tablet routes and fallbacks
+$template_array = array($template_base.'/mobile', $template_base.'/layouts', $template_base.'/partials', 'views');
+
+$detect = new Mobile_Detect;
+
+if( $detect->isTablet() ){
+	// If tablet
+	array_unshift($template_array, $template_base.'/tablet');
+} else if (!$detect->isMobile()) {
+	// If not tablet and not mobile
+	array_unshift($template_array, $template_base.'/desktop', $template_base.'/tablet');
 }
+
+Timber::$dirname = $template_array;
 
 class StarterSite extends TimberSite {
 
