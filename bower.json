@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "Behaviors.js": "git@github.com:adrianjonmiller/behaviors.js.git"
+    "Behaviors.js": "git@github.com:adrianjonmiller/behaviors.js.git",
+    "Mobile_Detect": "~2.8.17"
   }
 }

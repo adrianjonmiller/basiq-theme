@@ -1,6 +1,6 @@
 <?php
 // Require device detection library
-require_once 'vendor/Mobile-Detect-2.8.17/Mobile_Detect.php';
+require_once 'bower_components/Mobile_Detect/Mobile_Detect.php';
 require_once 'timber/timber.php';
 
 if ( ! class_exists( 'Timber' ) ) {
