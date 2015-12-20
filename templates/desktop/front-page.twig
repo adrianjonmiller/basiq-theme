@@ -1,7 +1,9 @@
 {% extends "base.twig" %}
 
 {% block content %}
-	desktop
+ <p>
+ 	Lorem ipsum dolor sit amet, <a href="#">Link Test</a> consectetur adipiscing elit. Integer faucibus elit vitae justo porttitor tincidunt. Pellentesque at purus aliquet, congue nulla id, sagittis orci. Vestibulum gravida in elit sed sodales. Ut quis quam id lacus scelerisque dignissim. Ut vel diam suscipit, tincidunt leo in, viverra sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse vitae congue mauris, ut cursus tortor. Nullam nec scelerisque risus, at fringilla nisi.
+ </p>
 	<p>{{qux}}</p>
 	{% for post in posts %}
 		{% include ['tease-'~post.post_type~'.twig', 'tease.twig'] %}
