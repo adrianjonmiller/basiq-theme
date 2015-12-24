@@ -18,6 +18,20 @@ $template_array = array($template_base.'/mobile', $template_base.'/layouts', $te
 
 $detect = new Mobile_Detect;
 
+function device_class() {
+	$detect = new Mobile_Detect;
+
+	if( $detect->isTablet() ){
+		// If tablet
+		return "tablet";
+	} else if (!$detect->isMobile()) {
+		// If not tablet and not mobile
+		return "desktop";
+	} else {
+		return "mobile";
+	}
+}
+
 if( $detect->isTablet() ){
 	// If tablet
 	array_unshift($template_array, $template_base.'/tablet');
@@ -71,7 +85,7 @@ class StarterSite extends TimberSite {
 	}
 
 	function add_to_context( $context ) {
-		$context['device'] = 'mobile';
+		$context['device'] = device_class();
 		$context['stuff'] = 'I am a value set in your functions.php file';
 		$context['notes'] = 'These values are available everytime you call Timber::get_context();';
 		$context['menu'] = new TimberMenu('primary-menu');

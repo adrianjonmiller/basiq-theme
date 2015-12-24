@@ -1,0 +1,23 @@
+.nav-style--a {
+  a {
+    height: 5rem;
+    width: 5rem;
+    border-radius: 999em;
+    display: block;
+    background-color: gray;
+    text-decoration: none;
+    color: #fff;
+    border-bottom: none;
+    text-shadow: none;
+    overflow: hidden;
+    text-indent: 999em;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  + .nav-style--a {
+    margin-left: 1rem;
+  }
+}

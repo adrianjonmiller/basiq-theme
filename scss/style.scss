@@ -4,4 +4,7 @@
  * Author: Upstatement and YOU!
 */
 
-@import "base/glob";
+@import
+  "mixins/glob",
+  "base/glob",
+  "theme/glob";

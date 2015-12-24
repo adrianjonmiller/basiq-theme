@@ -1,3 +1,9 @@
+@mixin flexbox {
+  flex-wrap: wrap;
+  display: flex;
+}
+
+
 @mixin mobile {
   .mobile & {
     @content;
