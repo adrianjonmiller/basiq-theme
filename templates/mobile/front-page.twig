@@ -1,10 +1,10 @@
 {% extends "base.twig" %}
 
 {% block content %}
-mobile
-	<p>{{qux}}</p>
-	{% for post in posts %}
-		{% include ['tease-'~post.post_type~'.twig', 'tease.twig'] %}
-	{% endfor %}
-	{% include 'sidebar.twig' %}
+	<section class="block padded text-centered">
+		<h2 class="heading--lg">
+			Design is not about self expression; <br>
+			it’s about the message. It’s about the clarity of that message<br>to its intended audience.
+		</h2>
+	</section>
 {% endblock %}

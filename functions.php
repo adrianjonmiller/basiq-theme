@@ -71,7 +71,8 @@ class StarterSite extends TimberSite {
 		add_filter( 'get_twig', array( $this, 'add_to_twig' ) );
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'init', array( $this, 'register_taxonomies' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'loadScripts' ) );
+		add_action( 'init', array( $this, 'rewrite_rules' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'loadScripts') );
 		add_action( 'widgets_init', array( $this, 'widgets' ) );
 		parent::__construct();
 	}
@@ -86,7 +87,7 @@ class StarterSite extends TimberSite {
 
 	function add_to_context( $context ) {
 		$context['device'] = device_class();
-		$context['stuff'] = 'I am a value set in your functions.php file';
+		$context['theme_url'] = get_stylesheet_directory_uri();
 		$context['notes'] = 'These values are available everytime you call Timber::get_context();';
 		$context['menu'] = new TimberMenu('primary-menu');
 		$context['dynamic_sidebar'] = Timber::get_widgets('sidebar-1');
@@ -103,6 +104,7 @@ class StarterSite extends TimberSite {
 
 	function loadScripts() {
     wp_enqueue_script( 'script-name', get_template_directory_uri() . '/js/example.js', array(), '1.0.0', true );
+
   }
 
 	function widgets() {
@@ -110,11 +112,25 @@ class StarterSite extends TimberSite {
 			'name'          => esc_html__( 'Sidebar', 'theme' ),
 			'id'            => 'sidebar-1',
 			'description'   => '',
-			'before_widget' => '<section id="%1$s" class="widget %2$s">',
-			'after_widget'  => '</section>',
+			'before_widget' => '<div id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</div>',
 			'before_title'  => '<h2 class="widget-title">',
 			'after_title'   => '</h2>',
 		) );
+
+		register_sidebar( array(
+			'name'          => esc_html__( 'Topbar', 'theme' ),
+			'id'            => 'sidebar-2',
+			'description'   => '',
+			'before_widget' => '<div id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h2 class="widget-title" style="display: none;">',
+			'after_title'   => '</h2>',
+		) );
+	}
+
+	function rewrite_rules() {
+		add_rewrite_rule('img/', get_template_directory_uri().'/img');
 	}
 }
 

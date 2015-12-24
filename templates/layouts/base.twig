@@ -8,16 +8,14 @@
 	<body class="{{body_class}} {{ device }}" data-template="base.twig">
 		{% include 'header.twig' %}
 		<main role="main">
-			<div class="measure">
-				<div>
-					{% block content %}
-			      Sorry, no content
-			    {% endblock %}
-				</div>
+			<div class="container">
+				{% block content %}
+		      Sorry, no content
+		    {% endblock %}
 
 				{% if dynamic_sidebar %}
-					<div>
-				    <aside>
+					<div class="block gray">
+				    <aside class="bottom-bar">
 				      {{ dynamic_sidebar }}
 				    </aside>
 					</div>
